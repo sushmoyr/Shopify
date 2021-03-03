@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 
 class FirebaseRepo {
     private val db = Firebase.firestore
+    private val auth = Firebase.auth
     fun insertUser(user: User) {
         db.collection(Constants.USER)
             .document(user.uid)
@@ -23,8 +24,13 @@ class FirebaseRepo {
             }
     }
 
+    fun signOut()
+    {
+        auth.signOut()
+    }
+
     fun getCurrentUserId(): String? {
-        val currentUser = Firebase.auth.currentUser
+        val currentUser = auth.currentUser
         if (currentUser != null) {
             Log.d("Fire store", currentUser.uid)
             return currentUser.uid

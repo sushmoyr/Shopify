@@ -6,94 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
 
-    <Button
-        android:id="@+id/generateButton"
-        android:layout_width="wrap_content"
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:id="@+id/bottomNavigation"
+        app:menu="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gender" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/firstnamemain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
+    <fragment
+        android:id="@+id/main_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/my_nav" />
 
-    <TextView
-        android:id="@+id/lastnamemain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/firstnamemain"
-        app:layout_constraintStart_toStartOf="@+id/firstnamemain"
-        app:layout_constraintTop_toBottomOf="@+id/firstnamemain" />
 
-    <TextView
-        android:id="@+id/emailMain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/lastnamemain"
-        app:layout_constraintStart_toStartOf="@+id/lastnamemain"
-        app:layout_constraintTop_toBottomOf="@+id/lastnamemain" />
 
-    <TextView
-        android:id="@+id/uidmain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/emailMain"
-        app:layout_constraintStart_toStartOf="@+id/emailMain"
-        app:layout_constraintTop_toBottomOf="@+id/emailMain" />
-
-    <TextView
-        android:id="@+id/mobile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/uidmain"
-        app:layout_constraintStart_toStartOf="@+id/uidmain"
-        app:layout_constraintTop_toBottomOf="@+id/uidmain" />
-
-    <TextView
-        android:id="@+id/gender"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/mobile"
-        app:layout_constraintStart_toStartOf="@+id/mobile"
-        app:layout_constraintTop_toBottomOf="@+id/mobile" />
-
-    <Button
-        android:id="@+id/signout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Button"
-        app:layout_constraintStart_toStartOf="@+id/generateButton"
-        app:layout_constraintTop_toBottomOf="@+id/generateButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

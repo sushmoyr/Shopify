@@ -8,7 +8,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.shopify.R
+import com.example.shopify.UserFragment
 import com.example.shopify.data.model.User
 import com.example.shopify.data.repository.FirebaseRepo
 import com.example.shopify.utils.Constants
@@ -28,7 +32,9 @@ class MainActivity : AppCompatActivity() {
         //initialize
         loadUserDetails()
 
-        signout.setOnClickListener{
+        setUpBottomNavigationBar()
+
+        /*signout.setOnClickListener{
             val auth = Firebase.auth
             auth.signOut()
 
@@ -38,8 +44,14 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, AuthActivity::class.java))
                 finish()
             },500)
-        }
+        }*/
 
+    }
+
+    private fun setUpBottomNavigationBar() {
+        val navController = findNavController(R.id.main_container)
+        //val appBarConfiguration = AppBarConfiguration(setOf(R.id.homeFragment, R.id.productFragment, R.id.cartFragment, R.id.userFragment))
+        bottomNavigation.setupWithNavController(navController)
     }
 
     private fun loadUserDetails()
@@ -51,12 +63,6 @@ class MainActivity : AppCompatActivity() {
             firebaseRepo.readCurrentUser(object : MyCallback {
                 override fun onCallback(value: User) {
                     val user = value
-                    firstnamemain.text = user.firstName
-                    lastnamemain.text = user.lastName
-                    emailMain.text = user.email
-                    uidmain.text = user.uid
-                    mobile.text = user.mobile
-                    gender.text = user.gender
                     saveData(user)
                 }
 
