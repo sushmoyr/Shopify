@@ -1,14 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditProfileFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <variable
+            name="user"
+            type="com.example.shopify.data.model.User" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="16dp"
+        tools:context=".EditProfileFragment">
 
-</FrameLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/avatar1"
+            app:civ_border_color="@color/purple_500"
+            app:civ_border_width="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintBottom_toTopOf="@+id/lastname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_image">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/firstNameEt"
+                android:text="@{user.firstName}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="First Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lastname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/email"
+            app:layout_constraintEnd_toEndOf="@+id/firstname"
+            app:layout_constraintStart_toStartOf="@+id/firstname"
+            app:layout_constraintTop_toBottomOf="@+id/firstname">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lastNameEt"
+                android:text="@{user.lastName}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="Last Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/mobile"
+            app:layout_constraintEnd_toEndOf="@+id/lastname"
+            app:layout_constraintStart_toStartOf="@+id/lastname"
+            app:layout_constraintTop_toBottomOf="@+id/lastname">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{user.email}"
+                android:background="@android:color/transparent"
+                android:hint="Email" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/mobile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/gender"
+            app:layout_constraintEnd_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mobileEt"
+                android:text="@{user.mobile}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="Mobile No." />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/gender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/updateProfileButton"
+            app:layout_constraintEnd_toEndOf="@+id/mobile"
+            app:layout_constraintStart_toStartOf="@+id/mobile"
+            app:layout_constraintTop_toBottomOf="@+id/mobile">
+
+            <RadioButton
+                android:id="@+id/gender_male"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_selector"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="Male"
+                android:textColor="@drawable/radio_button_text_selector" />
+
+            <RadioButton
+                android:id="@+id/gender_female"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/radio_button_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Female"
+                android:textColor="@drawable/radio_button_text_selector" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/updateProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:text="Update Profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/gender"
+            app:layout_constraintStart_toStartOf="@+id/gender"
+            app:layout_constraintTop_toBottomOf="@+id/gender"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

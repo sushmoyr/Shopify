@@ -5,55 +5,119 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
+import com.example.shopify.data.model.User
+import com.example.shopify.data.repository.FirebaseRepo
+import com.example.shopify.databinding.FragmentEditProfileBinding
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import com.example.shopify.utils.Constants
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentEditProfileBinding? = null
+    private val binding get() = _binding!!
+
+    val firebaseRepo = FirebaseRepo()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false)
+        _binding = FragmentEditProfileBinding.inflate(layoutInflater, container, false)
+
+        binding.updateProfileButton.setOnClickListener {
+            updateProfile()
+            findNavController().navigate(R.id.action_editProfileFragment_to_userFragment)
+        }
+
+        binding.profileImage.setOnClickListener {
+            getProfilePhoto()
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun getProfilePhoto() {
+        if(ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED){
+            //Permission Granted
+            Constants.showImageChooser(requireActivity())
+        }
+        else{
+            ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                Constants.READ_EXTERNAL_STORAGE_PERMISSION_CODE
+            )
+        }
+    }
+
+    private fun updateProfile() {
+        val firstName = binding.firstNameEt.text.toString()
+        val lastName = binding.lastNameEt.text.toString()
+        val email = binding.emailEt.text.toString()
+        val mobile = binding.mobileEt.text.toString()
+        val gender = getGender()
+        val uid = firebaseRepo.getCurrentUserId()!!
+        val user = User(uid, firstName, lastName, email, "", mobile, gender)
+
+        firebaseRepo.updateProfile(requireContext(), user)
+        firebaseRepo.updateEmail(email)
+
+    }
+
+    private fun getGender(): String {
+        return when(binding.gender.checkedRadioButtonId){
+            R.id.gender_male-> "Male"
+            R.id.gender_female -> "Female"
+            else -> "Not set"
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == Constants.READ_EXTERNAL_STORAGE_PERMISSION_CODE)
+        {
+            if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                Constants.showImageChooser(requireActivity())
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("debugger", "activity result")
+        if(resultCode== Activity.RESULT_OK)
+        {
+            Log.d("debugger", "result ok")
+            if(requestCode==Constants.PICK_IMAGE_CODE)
+            {
+                Log.d("debugger", "requested")
+                if(data!=null)
+                {
+                    val selectedImageUri = data.data
+                    Log.d("debugger", "data is here")
+                    Log.d("debugger", selectedImageUri.toString())
+                    binding.profileImage.setImageURI(Uri.parse(selectedImageUri.toString()))
                 }
             }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
+
+
+
+
 }

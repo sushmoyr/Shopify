@@ -15,17 +15,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-        {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        }
-        else
-        {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
+        decoration()
 
         Handler().postDelayed({
             startActivity(Intent(this, AuthActivity::class.java))

@@ -2,7 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
-    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -24,6 +26,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -52,6 +58,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.firebase:firebase-auth-ktx:20.0.2'
+
+    kapt "com.android.databinding:compiler:3.2.0-alpha10"
+    kapt "androidx.databinding:databinding-common:4.1.2"
+
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

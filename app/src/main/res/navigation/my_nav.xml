@@ -37,5 +37,8 @@
         <action
             android:id="@+id/action_editProfileFragment_to_userFragment"
             app:destination="@id/userFragment" />
+        <argument
+            android:name="userData"
+            app:argType="com.example.shopify.data.model.User" />
     </fragment>
 </navigation>

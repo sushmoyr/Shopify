@@ -1,6 +1,8 @@
 package com.example.shopify.data.repository
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.example.shopify.data.model.User
 import com.example.shopify.utils.Constants
 import com.example.shopify.utils.MyCallback
@@ -62,6 +64,29 @@ class FirebaseRepo {
                 val user = document.toObject(User::class.java)
                 myCallback.onCallback(user!!)
             }
+    }
+
+    fun updateProfile(context: Context, user: User) {
+        db.collection(Constants.USER)
+            .document(user.uid)
+            .set(user)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Data Updated", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun updateEmail(email:String)
+    {
+        val user = auth.currentUser!!
+
+        user.updateEmail(email)
+            .addOnSuccessListener {
+                Log.d("Update email", "Success")
+            }
+            .addOnFailureListener {
+                Log.d("Update email","Failed ${it.toString()}")
+            }
+
     }
 
 }

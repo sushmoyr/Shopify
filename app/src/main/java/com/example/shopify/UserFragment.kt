@@ -13,39 +13,37 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.shopify.data.model.User
 import com.example.shopify.data.repository.FirebaseRepo
+import com.example.shopify.databinding.FragmentUserBinding
 import com.example.shopify.ui.activities.AuthActivity
 import com.example.shopify.ui.viewmodels.MainViewModel
-import com.example.shopify.utils.Constants
 import com.example.shopify.utils.MyCallback
-import kotlinx.android.synthetic.main.fragment_user.*
-import kotlinx.android.synthetic.main.fragment_user.view.*
+
 
 class UserFragment : Fragment() {
     private val mainViewModel: MainViewModel by viewModels()
     val firebaseRepo = FirebaseRepo()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var _binding:FragmentUserBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        _binding = FragmentUserBinding.inflate(layoutInflater, container, false)
         loadUserDetails()
 
-        val view = inflater.inflate(R.layout.fragment_user, container, false)
-
-        view.signoutBtn.setOnClickListener{
+        binding.signoutBtn.setOnClickListener{
             signOut()
         }
 
-        view.editProfileBtn.setOnClickListener{
+        binding.editProfileBtn.setOnClickListener{
             findNavController().navigate(R.id.action_userFragment_to_editProfileFragment)
         }
 
-        return view
+        return binding.root
     }
 
     private fun signOut() {
@@ -93,10 +91,10 @@ class UserFragment : Fragment() {
     }
 
     private fun updateUI(name: String, email: String, gender: String, mobile: String) {
-        profile_name.text = name
-        profile_email.text = email
-        profile_gender.text = gender
-        profile_mobile.text = mobile
+        binding.profileName.text = name
+        binding.profileEmail.text = email
+        binding.profileGender.text = gender
+        binding.profileMobile.text = mobile
 
     }
 

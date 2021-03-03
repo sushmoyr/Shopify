@@ -4,28 +4,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.children
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.shopify.R
+import com.example.shopify.databinding.FragmentLoginBinding
 import com.example.shopify.ui.activities.MainActivity
 import com.example.shopify.ui.viewmodels.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private val mainViewModel: MainViewModel by viewModels()
+
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +37,7 @@ class LoginFragment : Fragment() {
         super.onStart()
 
         val currentUser = auth.currentUser
-        if(currentUser!=null)
-        {
+        if (currentUser != null) {
             Toast.makeText(requireContext(), "Welcome Back", Toast.LENGTH_SHORT).show()
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
@@ -50,42 +50,41 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_login, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
 
-        view.register_here .setOnClickListener {
+        binding.registerHere.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
-        
-        view.login_btn.setOnClickListener{
+
+        binding.loginBtn.setOnClickListener {
             loginUser()
         }
 
-        view.forgetpassword_register.setOnClickListener {
+        binding.forgetpasswordRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_forgetPassFragment)
         }
 
-        return view
+        return binding.root
     }
-    
-    private fun loginUser()
-    {
-        val email = login_email_et.text.toString()
-        val password = login_password_et.text.toString()
-        if(mainViewModel.validateLoginData(email, password))
-        {
-            view?.isUserInteractionEnabled(false)
-            login_progress.visibility = View.VISIBLE
-            root_layout_login.alpha = 0.4f
 
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
+    private fun loginUser() {
+        val email = binding.loginEmailEt.text.toString()
+        val password = binding.loginPasswordEt.text.toString()
+        if (mainViewModel.validateLoginData(email, password)) {
+            view?.isUserInteractionEnabled(false)
+            binding.loginProgress.visibility = View.VISIBLE
+            binding.rootLayoutLogin.alpha = 0.4f
+
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
                         if (user != null) {
                             Log.d("userdata", "Email: ${user.email.toString()}")
                         }
-                        login_progress.visibility = View.GONE
-                        root_layout_login.alpha = 1f
+                        binding.loginProgress.visibility = View.GONE
+                        binding.rootLayoutLogin.alpha = 1f
 
 
 
@@ -93,18 +92,18 @@ class LoginFragment : Fragment() {
                             val intent = Intent(activity, MainActivity::class.java)
                             startActivity(intent)
                             activity?.finish()
-                        },1000)
+                        }, 1000)
 
                     } else {
-                        Toast.makeText(requireContext(), "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(), "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
                     // ...
                 }
-        }
-        else
-        {
+        } else {
             Toast.makeText(requireContext(), "Field can't be empty", Toast.LENGTH_SHORT).show()
         }
     }
